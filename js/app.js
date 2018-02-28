@@ -1,15 +1,25 @@
+const gameBoard = {
+
+}
+
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x,y,speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
+    this.x = x;
+    thix.y = y;
+    this.speed = speed;
     this.sprite = 'images/enemy-bug.png';
 };
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
+
+//Speed means moving in x-direction so dx/dt
+
 Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
@@ -24,12 +34,43 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+class Player{
+    constructor() {
+        this.sprite = 'images/char-boy.png';
+        this.x = 202;
+        this.y = 400;
+    }
+    update() {
+        switch('keyup' === true){
+            case "left":
+            case "up":
+                this.y -= 50;
+            case "right":
+            case "down":
+        }
+    }
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    //handleInput()
+}
+
+//How many enemies?
+/*const allEnemies = [];
+(function numberOfEnemies (number) {
+    do {
+        allEnemies.push(new Enemy());
+    }
+    while (allEnemies.length<number);
+})(6);*/
 
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
+let player = new Player();
 
 
 // This listens for key presses and sends the keys to your
