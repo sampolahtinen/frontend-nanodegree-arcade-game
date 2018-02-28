@@ -3,7 +3,7 @@ const gameBoard = {
 }
 
 // Enemies our player must avoid
-var Enemy = function(x,y,speed) {
+var Enemy = function (x, y, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -20,40 +20,71 @@ var Enemy = function(x,y,speed) {
 
 //Speed means moving in x-direction so dx/dt
 
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.update = function (dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-class Player{
+function reset() {
+    player.x = 202;
+    player.y = 400;
+}
+
+function isTop() {
+    if(player.y === -15)
+        return true;
+}
+
+const leftBoundary = 0;
+const rightBoundary = 404;
+const topBoundary = -15;
+const bottomBoundary = 400;
+
+class Player {
     constructor() {
         this.sprite = 'images/char-boy.png';
         this.x = 202;
         this.y = 400;
     }
     update() {
-        switch('keyup' === true){
-            case "left":
-            case "up":
-                this.y -= 50;
-            case "right":
-            case "down":
-        }
+
     }
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
-    //handleInput()
+    handleInput(keypress) {
+        switch (keypress) {
+            case "left":
+                if (this.x === leftBoundary) break;
+                this.x -= 101;
+                break;
+            case "up":
+                if (this.y === topBoundary){
+                    reset();
+                    break;
+                }
+                this.y -= 83;
+                break;
+            case "right":
+                if (this.x === rightBoundary) break;
+                this.x += 101;
+                break;
+            case "down":
+                if (this.y === bottomBoundary) break;
+                this.y += 83;
+                break;
+        }
+    }
 }
 
 //How many enemies?
@@ -75,7 +106,7 @@ let player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keyup', function (e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
