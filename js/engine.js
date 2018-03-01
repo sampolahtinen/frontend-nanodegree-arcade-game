@@ -45,7 +45,7 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
 
-        //update(dt);
+        update(dt);
         render();
 
         /* Set our lastTime variable which is used to determine the time delta
@@ -77,19 +77,19 @@ var Engine = (function(global) {
      * it commented out - you may or may not want to implement this
      * functionality this way (you could just implement collision detection
      * on the entities themselves within your app.js file).
-     
+     */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
-*/
+
 
     /* This is called by the update function and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
      * player object. These update methods should focus purely on updating
      * the data/properties related to the object. Do your drawing in your
-     * render methods.
+     * render methods. */
      
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
@@ -97,7 +97,7 @@ var Engine = (function(global) {
         });
         player.update();
     }
-    */
+    
 
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
@@ -154,9 +154,9 @@ var Engine = (function(global) {
     
     function renderEntities() {
     
-        /*allEnemies.forEach(function(enemy) {
+        allEnemies.forEach(function(enemy) {
             enemy.render();
-        });*/
+        });
 
         player.render();
     }
