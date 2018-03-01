@@ -1,0 +1,254 @@
+/*GENERAL*/
+
+body {
+        padding-top: 54px;
+     }
+
+a {
+	color:  #343a40;
+}
+a:hover {
+	color: #FFFFFF;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+/*LOGO*/
+
+#logo {
+	width: 6rem;
+	max-width: 15%;
+	margin-right: 15px;
+}
+/**/
+
+.start {
+    margin-top: -100px;
+    width: 505px;
+    height: 606px;
+    background-color: #21252917;
+    margin-top: 50px;
+    z-index: 1000;
+}
+
+.start-btn {
+    padding: 10px 15px 10px 15px;
+    font-size: 2rem;
+    border: 1px solid white;
+    border-color: #0c5460;
+    background-color: #0c5460;
+    height: 100px;
+    text-transform: uppercase;
+
+}
+
+.deck {
+    width: 640px;
+    min-height: 680px;
+    background: linear-gradient(360deg, #0c54602e 0%, #e9efefc7 100%);
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 6px 10px 10px 0 rgba(46, 61, 73, 0.2);
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 3em;
+    z-index: 1;
+}
+
+.deck .card {
+    height: 125px;
+    width: 125px;
+    background: #2e3d49;
+    font-size: 0;
+    color: #343a3f;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+}
+
+.start-game .card {
+    background: #2e3d4973;
+
+}
+
+.deck .card.open {
+	transform: rotateY(0);
+	font-size: 35pt;
+	background-color: #80808000;
+    animation: rotateY 0.5s 1 linear;
+}
+
+@keyframes rotateY {
+   to { transform: rotateY(180deg); }
+}
+
+
+.deck .card.match {
+	background-color: #008026c7;
+	font-size: 40pt;
+    animation: positiveNudge 0.3s linear 1 alternate;
+
+}
+
+
+@keyframes positiveNudge {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  
+  50% {
+    transform: translate(0, 50px);
+  }
+  
+  80% {
+    transform: translate(0, -50px);
+  }
+}
+/*
+ * Styles for the Score Panel
+ */
+
+.score-panel {
+    width: 640px;
+    /*min-height: 680px;*/
+    background-color: #21252917;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    box-shadow: 6px 10px 10px 0 rgba(46, 61, 73, 0.2);
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2em 0 2em;
+    z-index: 1;
+}
+
+.moves {
+    padding-left: 10px;
+}
+
+.score-panel .stars {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    margin: 0 5px 0 0;
+}
+
+.score-panel .stars li {
+    list-style: none;
+    display: inline-block;
+}
+
+.timer {
+	font-size: 1.5rem;
+    margin-left: -85px;
+}
+
+.fa.fa-repeat {
+    font-size: 1.5rem;
+}
+
+/*MODAL*/
+/* The Modal (background) */
+
+.winning-modal-bg {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.winning-content {
+    background-color: #fefefe;
+    width: 400px;
+    height: 470px;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 10px;
+    border: 1px solid #888;
+    background: white;
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.8);
+}
+
+.stats-container {
+    padding-top: 40px;
+}
+
+.stats-container h4 {
+    padding-top: 10px;
+}
+
+.score-info {
+    padding-bottom: 30px;
+}
+
+.end-stars .stars {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    margin: 0 5px 0 0;
+}
+.end-stars .stars li {
+    list-style: none;
+    display: inline-block;
+}
+
+
+/* The Close Button */
+.close {
+    padding-bottom: 10px;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.play-again {
+    margin-top: 40px;
+    padding: 15px;
+}
+
+.final-score {
+    padding-top: 10px;
+}
+
+/*FOOTER*/
+.footer ul {
+	padding:15px;
+}
+
+.bg-light {
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 992px) {
+        body {
+          padding-top: 56px;
+        }
+      }

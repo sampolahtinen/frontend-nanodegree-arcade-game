@@ -48,8 +48,9 @@ function reset() {
 }
 
 function isTop() {
-    if(player.y <= topBoundary)
+    if(player.y == topBoundary) {
         return true;
+    }
 }
 
 function checkCollisions() {
@@ -69,6 +70,7 @@ class Player {
         this.x = 202;
         this.y = 400;
     }
+
     update() {
         if( isTop() ) {  //if player gets water, wait some milliseconds and reset its position
             setTimeout(function(){
@@ -76,6 +78,7 @@ class Player {
             },250);
         } 
     }
+
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
@@ -87,6 +90,10 @@ class Player {
                 this.x -= 101;
                 break;
             case "up":
+                if (isTop() ) {
+                    this.y = this.y; // prevents stepping over the topBoundary while setTimeout is running.
+                    break;
+                }
                 this.y -= 83;
                 break;
             case "right":

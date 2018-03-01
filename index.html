@@ -1,13 +1,90 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Effective JavaScript: Frogger</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <script src="js/resources.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/engine.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Arcade Game: Frogger</title>
+        <link rel="stylesheet" href="css/style.css">
+        <link href="css/main.css" rel="stylesheet">
+    
+        <title>Portfolio - Sampo Lahtinen</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
+        <link rel="stylesheet" href="vendor/font-awesome-4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+            <a class="navbar-brand" href="#"><img id="logo" src="./img/udacityLogo.png" alt="logo">Arcade Game: Frogger</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">This is me
+                    <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CV</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    
+        <!-- Page Content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center start" id="loadGame"></div>
+            </div>
+        </div>
+
+
+        <!-- The Modal -->
+        <div class="container-fluid winning-modal-bg">
+            <!-- Modal content -->
+            <div class="winning-content">
+            <span class="close">&times;</span>
+                <div class="stats-container text-center">
+                <span><i class="fa fa-trophy fa-5x"></i></span>
+                <h2>You Won!</h2>
+                <span class="score-info"></span>
+                <div><h4>...with final score of...</h4></div>
+                <div><h2 class="final-score">0</h2></div>
+                <div class="end-stars"></div>
+                <button class="btn-info play-again">Play Again?</button>
+                </div>
+            </div>
+        </div>
+        <!--FOOTER -->
+        <footer class="footer bg-light">
+            <div class="container">
+            <div class="row">
+                <div class="col-sm-12 contactBox">
+                <ul class="list-unstyled">
+                    <li><h6>Contact:</h6></li>
+                    <li><i class="fa fa-phone fa-1x"></i> +45 1234558</li>
+                    <li><i class="fa fa-envelope-o fa-1x" aria-hidden="true"></i> <a href="mailto:sampo.lahtinen@icloud.com">sampo.lahtinen@icloud.com</a></li>
+                </ul>
+                </div>
+            </div>
+            </div>
+        </footer>
+
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="js/resources.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/engine.js"></script>
+    </body>
 </html>
