@@ -58,10 +58,11 @@ function checkCollisions() {
         if(player.y == Math.round(enemy.y)) {
             if(Math.abs(player.x - Math.round(enemy.x)) <= 30) {
             reset();
-            console.log("same");
+            return true;
             }
         }
     }
+    return false;
 }
 
 class Player {
@@ -107,6 +108,31 @@ class Player {
         }
     }
 }
+
+// Lives 
+class Heart {
+    constructor() {
+        this.heartSolid = "<i class='fa fa-heart fa-2x'></i>";
+        this.heartEmpty = "<i class='far fa-heart fa-2x'></i>";
+        this.state = "<i class='fa fa-heart fa-2x'></i>";
+    }
+    toggleState() {
+        if(this.state === this.heartSolid) {
+            this.state = this.heartEmpty;
+        } else {
+            this.state = this.heartSolid;
+        }
+    }
+}
+
+const heart1 = new Heart();
+const heart2 = new Heart();
+const heart3 = new Heart();
+
+let ul = document.querySelector('#lives');
+let li = document.createElement("li");
+$(li).append(heart1.state);
+$(ul).append(li);
 
 //How many enemies?
 const allEnemies = [];
