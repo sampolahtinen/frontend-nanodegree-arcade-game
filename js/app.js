@@ -52,17 +52,19 @@ function isTop() {
         return true;
     }
 }
-
+//document.querySelectorAll('#lives li')[1].innerHTML = "<i class='far fa-heart fa-2x'></i>"
+let counter = 0;
+const heartArray =  document.querySelectorAll('#lives li');
 function checkCollisions() {
     for (const enemy of allEnemies) {
         if(player.y == Math.round(enemy.y)) {
             if(Math.abs(player.x - Math.round(enemy.x)) <= 30) {
             reset();
-            return true;
+            heartArray[counter].innerHTML = "<i class='far fa-heart fa-2x'></i>";
+            counter++;
             }
         }
     }
-    return false;
 }
 
 class Player {
@@ -109,7 +111,7 @@ class Player {
     }
 }
 
-// Lives 
+// Lives tee tästä objekti tai joku jolla on attribuutti lives: 3 ja vähennä/lisää sitä, sen jälkee leiki sillä numbal kun kerää syrämiä
 class Heart {
     constructor() {
         this.heartSolid = "<i class='fa fa-heart fa-2x'></i>";
@@ -125,14 +127,7 @@ class Heart {
     }
 }
 
-const heart1 = new Heart();
-const heart2 = new Heart();
-const heart3 = new Heart();
 
-let ul = document.querySelector('#lives');
-let li = document.createElement("li");
-$(li).append(heart1.state);
-$(ul).append(li);
 
 //How many enemies?
 const allEnemies = [];

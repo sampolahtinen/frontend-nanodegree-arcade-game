@@ -28,6 +28,16 @@ hr {
 }
 /**/
 
+li {
+    text-decoration: none;
+    list-style: none;
+    display: inline-block;
+}
+
+#lives li {
+    color: red;
+}
+
 .start {
     margin-top: -100px;
     width: 505px;
