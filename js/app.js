@@ -64,6 +64,16 @@ function checkCollisions() {
             }
         }
     }
+    //Check if player gets a heart
+    if(player.x == Math.round(hearts.x)) {
+        if(Math.abs(player.y - Math.round(hearts.y)) <= 30) {
+            if(player.lives < 3) {
+                hearts.addHeart();
+                display =  false;
+                    return true;
+        }
+    }
+}
     return false;
 }
 
@@ -111,9 +121,6 @@ class Player {
         }
     }
 }
-/*Enemy.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};*/
 
 //Lives class
 class Heart {
@@ -121,8 +128,8 @@ class Heart {
         this.heartSolid = '<i class="fa fa-heart fa-2x"></i>';
         this.heartEmpty = '<i class="far fa-heart fa-2x"></i>';
         this.sprite = 'images/heart.png' //'/images/Heart.png';
-        this.x = 202;
-        this.y = 200;
+        this.x = randomPlacement()[0];
+        this.y = randomPlacement()[1];
     }
 
     render() {
@@ -152,11 +159,33 @@ class Heart {
     }
 }
 
+const hearts = new Heart();
+
 function gameOver() {
     alert("GAME OVER");
 }
 
-const hearts = new Heart();
+function randomPlacement() {
+   let xy = [];
+   xy[0] = 101 * Math.floor(Math.random() * Math.floor(5));
+   xy[1] = 83 * Math.floor(Math.random() * Math.floor(3));
+    if(xy[1]===0) xy[1]=83;
+   return xy;
+}
+
+function randomInterval() {
+    const minTime = Math.ceil(10000);
+    const maxTime = Math.floor(20000);
+    const interval = Math.floor(Math.random() * (maxTime-minTime))+minTime;
+    return interval;
+}
+let display; //variable for displaying a Heart, if true it is displayed, if false its not
+setInterval(function(){
+    display = true;
+    hearts.x = randomPlacement()[0];
+    hearts.y = randomPlacement()[1];
+},randomInterval());
+
 
 function renderLives() {
     let livesDom = document.querySelector('#lives');

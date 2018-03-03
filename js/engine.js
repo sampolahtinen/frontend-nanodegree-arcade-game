@@ -159,7 +159,9 @@ var Engine = (function(global) {
             enemy.render();
         });
         player.render();
-        hearts.render();
+        if( display ) {
+            hearts.render();
+        }
 
     }
 
