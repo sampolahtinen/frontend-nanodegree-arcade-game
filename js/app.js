@@ -20,8 +20,6 @@ var Enemy = function (x, y, speed) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 
-//Speed means moving in x-direction so dx/dt
-
 Enemy.prototype.update = function (dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
@@ -39,9 +37,6 @@ Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 function reset() {
     player.x = 202;
     player.y = 400;
@@ -52,19 +47,24 @@ function isTop() {
         return true;
     }
 }
-//document.querySelectorAll('#lives li')[1].innerHTML = "<i class='far fa-heart fa-2x'></i>"
-let counter = 0;
+
 const heartArray =  document.querySelectorAll('#lives li');
+
 function checkCollisions() {
     for (const enemy of allEnemies) {
         if(player.y == Math.round(enemy.y)) {
             if(Math.abs(player.x - Math.round(enemy.x)) <= 30) {
-            reset();
-            heartArray[counter].innerHTML = "<i class='far fa-heart fa-2x'></i>";
-            counter++;
+                reset();
+                player.lives -= 1;
+                hearts.removeHeart();
+            if (player.lives === 0) {
+                console.log("GAME OVER!");
+            }
+            return true;
             }
         }
     }
+    return false;
 }
 
 class Player {
@@ -72,6 +72,7 @@ class Player {
         this.sprite = 'images/char-boy.png';
         this.x = 202;
         this.y = 400;
+        this.lives = 3;
     }
 
     update() {
@@ -110,26 +111,60 @@ class Player {
         }
     }
 }
+/*Enemy.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};*/
 
-// Lives tee tästä objekti tai joku jolla on attribuutti lives: 3 ja vähennä/lisää sitä, sen jälkee leiki sillä numbal kun kerää syrämiä
+//Lives class
 class Heart {
     constructor() {
-        this.heartSolid = "<i class='fa fa-heart fa-2x'></i>";
-        this.heartEmpty = "<i class='far fa-heart fa-2x'></i>";
-        this.state = "<i class='fa fa-heart fa-2x'></i>";
+        this.heartSolid = '<i class="fa fa-heart fa-2x"></i>';
+        this.heartEmpty = '<i class="far fa-heart fa-2x"></i>';
+        this.sprite = 'images/heart.png' //'/images/Heart.png';
+        this.x = 202;
+        this.y = 200;
     }
-    toggleState() {
-        if(this.state === this.heartSolid) {
-            this.state = this.heartEmpty;
-        } else {
-            this.state = this.heartSolid;
+
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+
+    removeHeart() {
+        let livesElement = document.querySelector('#lives');
+        for(let i = 0; i < (3-player.lives); i++ ){
+            heartArray[i].innerHTML = this.heartEmpty;
         }
+        if(player.lives === 0) {
+            gameOver();
+        }
+    }
+    addHeart() {
+        if (player.lives === 3) {
+            return false;
+        } 
+        for (let i = 2; i >= 0; i--){
+            if(heartArray[i].innerHTML === this.heartEmpty) {
+                heartArray[i].innerHTML = this.heartSolid;
+                break;
+            }
+        }
+        player.lives++;
     }
 }
 
+function gameOver() {
+    alert("GAME OVER");
+}
 
+const hearts = new Heart();
 
-//How many enemies?
+function renderLives() {
+    let livesDom = document.querySelector('#lives');
+        for(let i = 0; i < (3-player.lives); i++ ){
+            heartArray[i].innerHTML = "<i class='far fa-heart fa-2x'></i>";
+        }
+}
+
 const allEnemies = [];
 let randomInt = Math.floor(Math.random() * Math.floor(3)); //used for determining random sprite row
 

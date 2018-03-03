@@ -38,6 +38,10 @@ li {
     color: red;
 }
 
+.emptyLife {
+    color: #f9a1a1 !important;
+}
+
 .start {
     margin-top: -100px;
     width: 505px;

@@ -158,8 +158,9 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
+        hearts.render();
+
     }
 
     /* This function does nothing but it could have been a good place to
@@ -179,7 +180,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/heart.png'
     ]);
     Resources.onReady(init);
 
