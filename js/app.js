@@ -1,9 +1,21 @@
+//Remove default navigation of arrow keys
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
 // Canvas boundaries
 const leftBoundary = 0;
 const rightBoundary = 404;
 const topBoundary = -15;
 const bottomBoundary = 400;
 
+//DOM Elements
+const scorePanel = document.querySelector('.score h3');
+const playAgainButton = document.querySelector('.btn.btn-info');
+playAgainButton.addEventListener('click',resetGame);
 // Enemies our player must avoid
 var Enemy = function (x, y, speed) {
     this.x = x;
@@ -53,10 +65,9 @@ const heartArray =  document.querySelectorAll('#lives li');
 function checkCollisions() {
     for (const enemy of allEnemies) {
         if(player.y == Math.round(enemy.y)) {
-            if(Math.abs(player.x - Math.round(enemy.x)) <= 30) {
+            if(Math.abs(player.x - Math.round(enemy.x)) <= 60) {
                 reset();
-                player.lives -= 1;
-                hearts.removeHeart();
+                player.removeLife();
             return true;
             }
         }
@@ -65,29 +76,58 @@ function checkCollisions() {
     if(player.x == hearts.x) {
         if(Math.abs(player.y - Math.round(hearts.y)) <= 20) {
             if(player.lives < 3) {
+                hearts.x = 0;
+                hearts.y = 0;
                 hearts.displayHeart =  false;
-                hearts.addHeart();
+                player.addLife();
                 return true;
         }
     }
 }
     return false;
 }
-
 class Player {
     constructor() {
         this.sprite = 'images/char-boy.png';
         this.x = 202;
         this.y = 400;
         this.lives = 3;
+        this.score = 0;
+        this.heartSolid = '<i class="fa fa-heart fa-2x"></i>';
+        this.heartEmpty = '<i class="far fa-heart fa-2x"></i>';
     }
-
     update() {
         if( isTop() ) {  //if player gets water, wait some milliseconds and reset its position
-            setTimeout(function(){
+            /*setTimeout(function(){
                 reset();
-            },250);
-        } 
+            },250);*/
+            reset();
+            this.score += 10;
+            
+        }
+        scorePanel.innerHTML = `Score: ${this.score}`;
+    }
+    removeLife() {
+        this.lives--;
+        let livesElement = document.querySelector('#lives');
+        for(let i = 0; i < (3-player.lives); i++ ){
+            heartArray[i].innerHTML = this.heartEmpty;
+        }
+        if(player.lives === 0) {
+            gameOver();
+        }
+    }
+    addLife() {
+        if (player.lives === 3) {
+            return false;
+        }
+        if (player.lives === 2 ) {
+            heartArray[0].innerHTML = this.heartSolid;
+        }
+        if (player.lives === 1 ) {
+            heartArray[1].innerHTML = this.heartSolid;
+        }
+        this.lives++; 
     }
 
     render() {
@@ -122,44 +162,13 @@ class Player {
 //Lives class
 class Heart {
     constructor() {
-        this.heartSolid = '<i class="fa fa-heart fa-2x"></i>';
-        this.heartEmpty = '<i class="far fa-heart fa-2x"></i>';
         this.sprite = 'images/heart.png' //'/images/Heart.png';
         this.x = randomPlacement()[0];
         this.y = randomPlacement()[1];
         this.displayHeart = false; //variable for displaying a Heart, if true it is displayed, if false its not
     }
-
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
-
-    removeHeart() {
-        let livesElement = document.querySelector('#lives');
-        for(let i = 0; i < (3-player.lives); i++ ){
-            heartArray[i].innerHTML = this.heartEmpty;
-        }
-        if(player.lives === 0) {
-            gameOver();
-        }
-    }
-    addHeart() {
-        if (player.lives === 3) {
-            return false;
-        }
-        if (player.lives === 2 ) {
-            heartArray[0].innerHTML = this.heartSolid;
-        }
-        if (player.lives === 1 ) {
-            heartArray[1].innerHTML = this.heartSolid;
-        } 
-       /* for (let i = 2; i >= 0; i--){
-            if(heartArray[i].innerHTML === this.heartEmpty) {
-                heartArray[i].innerHTML = this.heartSolid;
-                return;
-            }
-        } */
-        //player.lives++;
     }
 
     displayOrNot() {
@@ -195,6 +204,18 @@ function gameOver() {
         return false;
     }
 }
+
+function youWon() {
+    if(player.score === 100) {
+            player.handleInput = ()=>{};
+            hearts.displayHeart = false;
+            return true;
+    }
+         else {
+            return false;
+        }
+    }
+
 
 function randomPlacement() {
    let xy = [];
@@ -239,6 +260,20 @@ let randomInt = Math.floor(Math.random() * Math.floor(3)); //used for determinin
 // Now instantiate your objects.
 // Place the player object in a variable called player
 let player = new Player();
+
+function resetGame() {
+    player.score = 0;
+    player.lives = 3;
+    hearts.displayOrNot();
+    for (let i  = 0; i<player.lives; i++){
+        heartArray[i].innerHTML = player.heartSolid;
+    }
+    allEnemies.forEach(enemy => {
+        enemy.x = 0;
+    });
+    reset();
+}
+    
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

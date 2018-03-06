@@ -93,7 +93,7 @@ var Engine = (function(global) {
      * render methods. */
      
     function updateEntities(dt) {
-        if(player.lives === 0)
+        if(player.lives === 0 || youWon() )
             {
                return false;
             } 
@@ -171,6 +171,9 @@ var Engine = (function(global) {
         if( gameOver() ) {
             ctx.drawImage(Resources.get('images/game-over.png'), 50, 150);
         }
+        if( youWon() ) {
+            ctx.drawImage(Resources.get('images/win.png'), 130, 150);
+        }
 
     }
 
@@ -193,7 +196,8 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/heart.png',
-        'images/game-over.png'
+        'images/game-over.png',
+        'images/win.png'
     ]);
     Resources.onReady(init);
 
