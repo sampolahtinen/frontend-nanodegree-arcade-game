@@ -93,10 +93,16 @@ var Engine = (function(global) {
      * render methods. */
      
     function updateEntities(dt) {
+        if(player.lives === 0)
+            {
+               return false;
+            } 
+        else {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
         player.update();
+    }
     }
     
 
@@ -159,8 +165,11 @@ var Engine = (function(global) {
             enemy.render();
         });
         player.render();
-        if( display ) {
+        if( hearts.displayHeart ) {
             hearts.render();
+        }
+        if( gameOver() ) {
+            ctx.drawImage(Resources.get('images/game-over.png'), 50, 150);
         }
 
     }
@@ -183,7 +192,8 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-        'images/heart.png'
+        'images/heart.png',
+        'images/game-over.png'
     ]);
     Resources.onReady(init);
 

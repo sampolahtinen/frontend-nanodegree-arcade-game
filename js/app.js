@@ -6,30 +6,30 @@ const bottomBoundary = 400;
 
 // Enemies our player must avoid
 var Enemy = function (x, y, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.x = x;
     this.y = y;
     this.speed = speed;
     this.sprite = 'images/enemy-bug.png';
 };
 
+//Function that changes the speed of a bug
+function speed() {
+    let minSpeed = Math.ceil(100);
+    let maxSpeed = Math.floor(300);
+    let randomSpeed = Math.floor(Math.random() * (maxSpeed - minSpeed)) + minSpeed;
+        return randomSpeed;
+    }
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-
 Enemy.prototype.update = function (dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
-    // all computers.
     if(this.x >=  rightBoundary) {
         this.x = 0;
+        this.speed = speed();
     } else {
         this.x += Math.round(this.speed * dt);
     }
-    speed();
 };
 
 // Draw the enemy on the screen, required method for game
@@ -57,20 +57,17 @@ function checkCollisions() {
                 reset();
                 player.lives -= 1;
                 hearts.removeHeart();
-            if (player.lives === 0) {
-                console.log("GAME OVER!");
-            }
             return true;
             }
         }
     }
     //Check if player gets a heart
-    if(player.x == Math.round(hearts.x)) {
-        if(Math.abs(player.y - Math.round(hearts.y)) <= 30) {
+    if(player.x == hearts.x) {
+        if(Math.abs(player.y - Math.round(hearts.y)) <= 20) {
             if(player.lives < 3) {
+                hearts.displayHeart =  false;
                 hearts.addHeart();
-                display =  false;
-                    return true;
+                return true;
         }
     }
 }
@@ -130,6 +127,7 @@ class Heart {
         this.sprite = 'images/heart.png' //'/images/Heart.png';
         this.x = randomPlacement()[0];
         this.y = randomPlacement()[1];
+        this.displayHeart = false; //variable for displaying a Heart, if true it is displayed, if false its not
     }
 
     render() {
@@ -148,21 +146,54 @@ class Heart {
     addHeart() {
         if (player.lives === 3) {
             return false;
+        }
+        if (player.lives === 2 ) {
+            heartArray[0].innerHTML = this.heartSolid;
+        }
+        if (player.lives === 1 ) {
+            heartArray[1].innerHTML = this.heartSolid;
         } 
-        for (let i = 2; i >= 0; i--){
+       /* for (let i = 2; i >= 0; i--){
             if(heartArray[i].innerHTML === this.heartEmpty) {
                 heartArray[i].innerHTML = this.heartSolid;
-                break;
+                return;
             }
+        } */
+        //player.lives++;
+    }
+
+    displayOrNot() {
+        let displayRandomly = Math.floor(Math.random() * Math.floor(2));
+        if (displayRandomly === 1) {
+            this.displayHeart = true;
+            return true;
+        } else {
+            this.displayHeart = false;
+            return false;
         }
-        player.lives++;
     }
 }
+
+setInterval(function(){
+    console.log(hearts.displayHeart);
+    if ( hearts.displayOrNot() ) {
+    hearts.x = randomPlacement()[0];
+    hearts.y = randomPlacement()[1];
+    } else {
+        hearts.displayHeart = false;
+    }
+},randomInterval());
 
 const hearts = new Heart();
 
 function gameOver() {
-    alert("GAME OVER");
+    if(player.lives === 0) {
+        player.handleInput = ()=>{};
+        hearts.displayHeart = false;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function randomPlacement() {
@@ -173,19 +204,12 @@ function randomPlacement() {
    return xy;
 }
 
-function randomInterval() {
-    const minTime = Math.ceil(10000);
-    const maxTime = Math.floor(20000);
+function randomInterval() { //controls how often hearts appear
+    const minTime = Math.ceil(5000);
+    const maxTime = Math.floor(10000);
     const interval = Math.floor(Math.random() * (maxTime-minTime))+minTime;
     return interval;
 }
-let display; //variable for displaying a Heart, if true it is displayed, if false its not
-setInterval(function(){
-    display = true;
-    hearts.x = randomPlacement()[0];
-    hearts.y = randomPlacement()[1];
-},randomInterval());
-
 
 function renderLives() {
     let livesDom = document.querySelector('#lives');
@@ -197,12 +221,6 @@ function renderLives() {
 const allEnemies = [];
 let randomInt = Math.floor(Math.random() * Math.floor(3)); //used for determining random sprite row
 
-function speed() {
-    let minSpeed = Math.ceil(150);
-    let maxSpeed = Math.floor(400);
-    let randomSpeed = Math.floor(Math.random() * (maxSpeed - minSpeed)) + minSpeed;
-        return randomSpeed;
-    }
 
 // Place all enemy objects in an array called allEnemies
 (function numberOfEnemies (number) {
@@ -224,7 +242,7 @@ let player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function (e) {
+document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
