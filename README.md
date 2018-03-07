@@ -6,7 +6,7 @@ Classical Arcade game - avoid enemies that try to eat you!
 Move by using arrow keys. If you hit the walls, naturally you can't go beyond. If you get to the top, you will score 10 points and move back to starting position. 
 
 ## How to win
-You win the game if you reach 100 points. You gain 10 points each time you hit the water row. 
+You win the game if you reach 100 points. You gain 10 points each time you hit the water row. You also gain 10 points from hearts if you already have full lives.
 
 ## Losing the game
 You lose the game if you get hit three times by the bugs. Those will eat you.
