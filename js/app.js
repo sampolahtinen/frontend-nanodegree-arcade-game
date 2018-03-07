@@ -262,8 +262,7 @@ let randomInt = Math.floor(Math.random() * Math.floor(3)); //used for determinin
 let player = new Player();
 
 function resetGame() {
-    player.score = 0;
-    player.lives = 3;
+    player = new Player();
     hearts.displayOrNot();
     for (let i  = 0; i<player.lives; i++){
         heartArray[i].innerHTML = player.heartSolid;
