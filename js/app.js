@@ -75,13 +75,13 @@ function checkCollisions() {
     //Check if player gets a heart
     if(player.x == hearts.x) {
         if(Math.abs(player.y - Math.round(hearts.y)) <= 20) {
-            if(player.lives < 3) {
+           // if(player.lives < 3) {
                 hearts.x = 0;
                 hearts.y = 0;
                 hearts.displayHeart =  false;
                 player.addLife();
                 return true;
-        }
+        //}
     }
 }
     return false;
@@ -98,13 +98,13 @@ class Player {
     }
     update() {
         if( isTop() ) {  //if player gets water, wait some milliseconds and reset its position
-            /*setTimeout(function(){
+            setTimeout(function(){
+                addScore();
                 reset();
-            },250);*/
-            reset();
-            this.score += 10;
-            
+            },250);
         }
+        
+        
         scorePanel.innerHTML = `Score: ${this.score}`;
     }
     removeLife() {
@@ -117,8 +117,10 @@ class Player {
             gameOver();
         }
     }
+
     addLife() {
         if (player.lives === 3) {
+            this.score += 10;
             return false;
         }
         if (player.lives === 2 ) {
@@ -215,7 +217,11 @@ function youWon() {
             return false;
         }
     }
-
+function addScore() { //a function to add score. It traps "this" to player object when calling inside setTimeout
+    if(player.y === topBoundary) {
+        player.score += 10;
+    }
+}
 
 function randomPlacement() {
    let xy = [];
