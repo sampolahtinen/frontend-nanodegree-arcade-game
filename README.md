@@ -5,7 +5,9 @@ Classical Arcade game - avoid enemies that try to eat you!
 ## How to install
 If you want to play this game you have two options:
 1. Clone the repository to your machine. Navigate to the folder and open "index.html" in your browser.
-2. Launch the game using this link: 
+2. Launch the game using this link: https://sampolahtinen.github.io/frontend-nanodegree-arcade-game/
+
+If the game does not run, try clearing your cache.
 
 ## How to play
 Move by using arrow keys. If you hit the walls, naturally you can't go beyond. If you get to the top, you will score 10 points and move back to starting position. 
