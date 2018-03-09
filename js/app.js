@@ -97,15 +97,19 @@ class Player {
         this.heartEmpty = '<i class="far fa-heart fa-2x"></i>';
     }
     update() {
-        if( isTop() ) {  //if player gets water, wait some milliseconds and reset its position
-            setTimeout(function(){
+        //if( isTop() ) {  //if player gets water, wait some milliseconds and reset its position
+        if(this.y === topBoundary) {
+            /*setTimeout(function(){
                 addScore();
                 reset();
-            },250);
+            },250);*/
+            //reset(); //Is it allowed to use functions that utilises player object within Player class declaration?
+            this.x = 202;
+            this.y = 400;
+            this.score += 10;
+            scorePanel.innerHTML = `Score: ${this.score}`;
         }
         
-        
-        scorePanel.innerHTML = `Score: ${this.score}`;
     }
     removeLife() {
         this.lives--;
@@ -113,20 +117,20 @@ class Player {
         for(let i = 0; i < (3-player.lives); i++ ){
             heartArray[i].innerHTML = this.heartEmpty;
         }
-        if(player.lives === 0) {
+        if(this.lives === 0) {
             gameOver();
         }
     }
 
     addLife() {
-        if (player.lives === 3) {
+        if (this.lives === 3) {
             this.score += 10;
             return false;
         }
-        if (player.lives === 2 ) {
+        if (this.lives === 2 ) {
             heartArray[0].innerHTML = this.heartSolid;
         }
-        if (player.lives === 1 ) {
+        if (this.lives === 1 ) {
             heartArray[1].innerHTML = this.heartSolid;
         }
         this.lives++; 
@@ -143,7 +147,7 @@ class Player {
                 this.x -= 101;
                 break;
             case "up":
-                if (isTop() ) {
+                if (this.y === topBoundary) {
                     this.y = this.y; // prevents stepping over the topBoundary while setTimeout is running.
                     break;
                 }
@@ -164,7 +168,7 @@ class Player {
 //Lives class
 class Heart {
     constructor() {
-        this.sprite = 'images/heart.png' //'/images/Heart.png';
+        this.sprite = 'images/heart.png'; //'/images/Heart.png';
         this.x = randomPlacement()[0];
         this.y = randomPlacement()[1];
         this.displayHeart = false; //variable for displaying a Heart, if true it is displayed, if false its not
@@ -258,7 +262,7 @@ let randomInt = Math.floor(Math.random() * Math.floor(3)); //used for determinin
         }else {
         allEnemies.push(new Enemy(0, 234 - ( i * 83 ) , speed())); //places the number amount of sprites to first 3 rows
         }
-        i++
+        i++;
     }
     while (allEnemies.length < number);
 })(4);
