@@ -4,9 +4,8 @@ Classical Arcade game - avoid enemies that try to eat you!
 
 ## How to install
 If you want to play this game you have two options:
-1. Clone the repository to your machine. 
-2. Navigate to the folder
-3. Open "index.html" in your browser.
+1. Clone the repository to your machine. Navigate to the folder and open "index.html" in your browser. 
+2. Launch the game using this link: https://sampolahtinen.github.io/frontend-nanodegree-arcade-game/
 
 If the game does not run, try clearing your cache.
 
