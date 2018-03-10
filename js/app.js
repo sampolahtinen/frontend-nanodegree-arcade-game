@@ -114,11 +114,8 @@ class Player {
     removeLife() {
         this.lives--;
         let livesElement = document.querySelector('#lives');
-        for(let i = 0; i < (3-player.lives); i++ ){
+        for(let i = 0; i < (3-this.lives); i++ ){
             heartArray[i].innerHTML = this.heartEmpty;
-        }
-        if(this.lives === 0) {
-            gameOver();
         }
     }
 
@@ -168,7 +165,7 @@ class Player {
 //Lives class
 class Heart {
     constructor() {
-        this.sprite = 'images/heart.png'; //'/images/Heart.png';
+        this.sprite = 'images/Heart.png'; //'/images/Heart.png';
         this.x = randomPlacement()[0];
         this.y = randomPlacement()[1];
         this.displayHeart = false; //variable for displaying a Heart, if true it is displayed, if false its not
@@ -283,7 +280,6 @@ function resetGame() {
     reset();
 }
     
-
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
