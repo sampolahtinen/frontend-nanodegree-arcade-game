@@ -16,11 +16,14 @@ const bottomBoundary = 400;
 const scorePanel = document.querySelector('.score h3');
 const playAgainButton = document.querySelector('.btn.btn-info');
 playAgainButton.addEventListener('click',resetGame);
-const heartArray =  document.querySelectorAll('#lives li');
+// Enemies our player must avoid
+var Enemy = function (x, y, speed) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+    this.sprite = 'images/enemy-bug.png';
+};
 
-let randomInt = Math.floor(Math.random() * Math.floor(3)); //used for determining random sprite row
-
-//Global supporting functions
 //Function that changes the speed of a bug
 function speed() {
     let minSpeed = Math.ceil(100);
@@ -28,32 +31,61 @@ function speed() {
     let randomSpeed = Math.floor(Math.random() * (maxSpeed - minSpeed)) + minSpeed;
         return randomSpeed;
     }
+// Update the enemy's position, required method for game
+// Parameter: dt, a time delta between ticks
+Enemy.prototype.update = function (dt) {
+    // You should multiply any movement by the dt parameter
+    // which will ensure the game runs at the same speed for
+    if(this.x >=  rightBoundary) {
+        this.x = 0;
+        this.speed = speed();
+    } else {
+        this.x += Math.round(this.speed * dt);
+    }
+};
+
+// Draw the enemy on the screen, required method for game
+Enemy.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
 
 function reset() {
     player.x = 202;
     player.y = 400;
-    }
-    
+}
+
 function isTop() {
     if(player.y == topBoundary) {
         return true;
+    }
+}
+
+const heartArray =  document.querySelectorAll('#lives li');
+
+function checkCollisions() {
+    for (const enemy of allEnemies) {
+        if(player.y == Math.round(enemy.y)) {
+            if(Math.abs(player.x - Math.round(enemy.x)) <= 60) {
+                reset();
+                player.removeLife();
+            return true;
+            }
         }
     }
-    function randomPlacement() {
-        let xy = [];
-        xy[0] = 101 * Math.floor(Math.random() * Math.floor(5));
-        xy[1] = 83 * Math.floor(Math.random() * Math.floor(3));
-         if(xy[1]===0) xy[1]=83;
-        return xy;
-     }
-     
-     function randomInterval() { //controls how often hearts appear
-         const minTime = Math.ceil(5000);
-         const maxTime = Math.floor(10000);
-         const interval = Math.floor(Math.random() * (maxTime-minTime))+minTime;
-         return interval;
-     }
-// Class declaration for Player, Enemy and Heart
+    //Check if player gets a heart
+    if(player.x == hearts.x) {
+        if(Math.abs(player.y - Math.round(hearts.y)) <= 20) {
+           // if(player.lives < 3) {
+                hearts.x = 0;
+                hearts.y = 0;
+                hearts.displayHeart =  false;
+                player.addLife();
+                return true;
+        //}
+    }
+}
+    return false;
+}
 class Player {
     constructor() {
         this.sprite = 'images/char-boy.png';
@@ -65,13 +97,18 @@ class Player {
         this.heartEmpty = '<i class="far fa-heart fa-2x"></i>';
     }
     update() {
-       
-        /*if(this.y === topBoundary) {
+        //if( isTop() ) {  //if player gets water, wait some milliseconds and reset its position
+        if(this.y === topBoundary) {
+            /*setTimeout(function(){
+                addScore();
+                reset();
+            },250);*/
+            //reset(); //Is it allowed to use functions that utilises player object within Player class declaration?
             this.x = 202;
             this.y = 400;
             this.score += 10;
             scorePanel.innerHTML = `Score: ${this.score}`;
-        }*/
+        }
         
     }
     removeLife() {
@@ -108,14 +145,7 @@ class Player {
                 break;
             case "up":
                 if (this.y === topBoundary) {
-                  //  this.y = this.y; // prevents stepping over the topBoundary while setTimeout is running.
-                    setTimeout( () => {
-                        this.x = 202;
-                        this.y = 400;
-                        this.score += 10;
-                        scorePanel.innerHTML = `Score: ${this.score}`;
-                    },250);
-                      
+                    this.y = this.y; // prevents stepping over the topBoundary while setTimeout is running.
                     break;
                 }
                 this.y -= 83;
@@ -130,45 +160,7 @@ class Player {
                 break;
         }
     }
-    youWon() {
-        if(this.score === 100) {
-                this.handleInput = ()=>{};
-                hearts.displayHeart = false;
-                return true;
-        }
-             else {
-                return false;
-            }
-        }
-    gameOver() {
-        if(this.lives === 0) {
-            this.handleInput = ()=>{};
-            hearts.displayHeart = false;
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
-
-// Enemies our player must avoid
-class Enemy extends Player {
-    constructor(x,y,speed) {
-        super(x,y);
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.sprite = 'images/enemy-bug.png';
-    }
-    update(dt) {
-        if(this.x >=  rightBoundary) {
-            this.x = 0;
-            this.speed = speed();
-        } else {
-            this.x += Math.round(this.speed * dt);
-        }
-    }
-    }
 
 //Lives class
 class Heart {
@@ -194,13 +186,70 @@ class Heart {
     }
 }
 
-// Instantiate objects
+setInterval(function(){
+    console.log(hearts.displayHeart);
+    if ( hearts.displayOrNot() ) {
+    hearts.x = randomPlacement()[0];
+    hearts.y = randomPlacement()[1];
+    } else {
+        hearts.displayHeart = false;
+    }
+},randomInterval());
 
-//Player
-let player = new Player();
+const hearts = new Heart();
 
-//Enemies
+function gameOver() {
+    if(player.lives === 0) {
+        player.handleInput = ()=>{};
+        hearts.displayHeart = false;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function youWon() {
+    if(player.score === 100) {
+            player.handleInput = ()=>{};
+            hearts.displayHeart = false;
+            return true;
+    }
+         else {
+            return false;
+        }
+    }
+function addScore() { //a function to add score. It traps "this" to player object when calling inside setTimeout
+    if(player.y === topBoundary) {
+        player.score += 10;
+    }
+}
+
+function randomPlacement() {
+   let xy = [];
+   xy[0] = 101 * Math.floor(Math.random() * Math.floor(5));
+   xy[1] = 83 * Math.floor(Math.random() * Math.floor(3));
+    if(xy[1]===0) xy[1]=83;
+   return xy;
+}
+
+function randomInterval() { //controls how often hearts appear
+    const minTime = Math.ceil(5000);
+    const maxTime = Math.floor(10000);
+    const interval = Math.floor(Math.random() * (maxTime-minTime))+minTime;
+    return interval;
+}
+
+function renderLives() {
+    let livesDom = document.querySelector('#lives');
+        for(let i = 0; i < (3-player.lives); i++ ){
+            heartArray[i].innerHTML = "<i class='far fa-heart fa-2x'></i>";
+        }
+}
+
 const allEnemies = [];
+let randomInt = Math.floor(Math.random() * Math.floor(3)); //used for determining random sprite row
+
+
 // Place all enemy objects in an array called allEnemies
 (function numberOfEnemies (number) {
     let i=0;
@@ -215,51 +264,9 @@ const allEnemies = [];
     while (allEnemies.length < number);
 })(4);
 
-//Heart
-const hearts = new Heart();
-
-function checkCollisions() {
-    for (const enemy of allEnemies) {
-        if(player.y == Math.round(enemy.y)) {
-            if(Math.abs(player.x - Math.round(enemy.x)) <= 60) {
-                reset();
-                player.removeLife();
-            return true;
-            }
-        }
-    }
-    //Check if player gets a heart
-    if(player.x == hearts.x) {
-        if(Math.abs(player.y - Math.round(hearts.y)) <= 20) {
-           // if(player.lives < 3) {
-                hearts.x = 0;
-                hearts.y = 0;
-                hearts.displayHeart =  false;
-                player.addLife();
-                return true;
-        //}
-    }
-}
-    return false;
-}
-
-setInterval(function(){
-    console.log(hearts.displayHeart);
-    if ( hearts.displayOrNot() ) {
-    hearts.x = randomPlacement()[0];
-    hearts.y = randomPlacement()[1];
-    } else {
-        hearts.displayHeart = false;
-    }
-},randomInterval());
-
-function renderLives() {
-    let livesDom = document.querySelector('#lives');
-        for(let i = 0; i < (3-player.lives); i++ ){
-            heartArray[i].innerHTML = "<i class='far fa-heart fa-2x'></i>";
-        }
-}
-
+// Now instantiate your objects.
+// Place the player object in a variable called player
+let player = new Player();
 
 function resetGame() {
     player = new Player();
