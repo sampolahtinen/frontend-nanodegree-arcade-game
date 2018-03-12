@@ -39,22 +39,21 @@ function isTop() {
         return true;
         }
     }
-    function randomPlacement() {
-        let xy = [];
-        xy[0] = 101 * Math.floor(Math.random() * Math.floor(5));
-        xy[1] = 83 * Math.floor(Math.random() * Math.floor(3));
-         if(xy[1]===0) xy[1]=83;
-        return xy;
-     }
-     
-     function randomInterval() { //controls how often hearts appear
-         const minTime = Math.ceil(5000);
-         const maxTime = Math.floor(10000);
-         const interval = Math.floor(Math.random() * (maxTime-minTime))+minTime;
-         return interval;
-     }
+function randomPlacement() {
+    let xy = [];
+    xy[0] = 101 * Math.floor(Math.random() * Math.floor(5));
+    xy[1] = 83 * Math.floor(Math.random() * Math.floor(3));
+        if(xy[1]===0) xy[1]=83;
+    return xy;
+    }
+    
+function randomInterval() { //controls how often hearts appear
+    const minTime = Math.ceil(5000);
+    const maxTime = Math.floor(10000);
+    const interval = Math.floor(Math.random() * (maxTime-minTime))+minTime;
+    return interval;
+}
 // Class declaration for Player, Enemy and Heart
-
 class Entity {
     constructor(x,y,sprite) {
         this.x = x;
@@ -66,8 +65,6 @@ class Entity {
     }
 }
 
-
-
 class Player extends Entity {
     constructor(x,y,sprite) {
         super(x,y,sprite);
@@ -77,14 +74,7 @@ class Player extends Entity {
         this.heartEmpty = '<i class="far fa-heart fa-2x"></i>';
     }
     update() {
-       
-        /*if(this.y === topBoundary) {
-            this.x = 202;
-            this.y = 400;
-            this.score += 10;
-            scorePanel.innerHTML = `Score: ${this.score}`;
-        }*/
-        
+        scorePanel.innerHTML = `Score: ${this.score}`;
     }
     removeLife() {
         this.lives--;
@@ -108,28 +98,15 @@ class Player extends Entity {
         this.lives++; 
     }
 
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
-
     handleInput(keypress) {
+        if(this.y === topBoundary) return;
         switch (keypress) {
             case "left":
                 if (this.x === leftBoundary) break;
                 this.x -= 101;
                 break;
             case "up":
-                if (this.y === topBoundary) {
-                  //  this.y = this.y; // prevents stepping over the topBoundary while setTimeout is running.
-                    setTimeout( () => {
-                        this.x = 202;
-                        this.y = 400;
-                        this.score += 10;
-                        scorePanel.innerHTML = `Score: ${this.score}`;
-                    },250);
-                      
-                    break;
-                }
+                if (this.y === topBoundary) break;
                 this.y -= 83;
                 break;
             case "right":
@@ -140,6 +117,13 @@ class Player extends Entity {
                 if (this.y === bottomBoundary) break;
                 this.y += 83;
                 break;
+        }
+        if(this.y === topBoundary) {
+            this.score += 10;
+            setTimeout( () => {
+                this.x = 202;
+                this.y = 400;
+            },250);
         }
     }
     youWon() {
@@ -167,10 +151,7 @@ class Player extends Entity {
 class Enemy extends Entity {
     constructor(x,y,sprite,speed) {
         super(x,y,sprite);
-        //this.x = x;
-        //this.y = y;
         this.speed = speed;
-       
     }
     update(dt) {
         if(this.x >=  rightBoundary) {
@@ -180,11 +161,12 @@ class Enemy extends Entity {
             this.x += Math.round(this.speed * dt);
         }
     }
-    }
+}
 
 //Lives class
 class Heart extends Entity {
     constructor(x,y,sprite) {
+        super(x,y,sprite);
         this.displayHeart = false; //variable for displaying a Heart, if true it is displayed, if false its not
     }
 
@@ -238,13 +220,11 @@ function checkCollisions() {
     //Check if player gets a heart
     if(player.x == hearts.x) {
         if(Math.abs(player.y - Math.round(hearts.y)) <= 20) {
-           // if(player.lives < 3) {
                 hearts.x = 0;
                 hearts.y = 0;
                 hearts.displayHeart =  false;
                 player.addLife();
                 return true;
-        //}
     }
 }
     return false;
@@ -267,9 +247,8 @@ function renderLives() {
         }
 }
 
-
 function resetGame() {
-    player = new Player();
+    player = new Player(202,400,'images/char-boy.png');
     hearts.displayOrNot();
     for (let i  = 0; i<player.lives; i++){
         heartArray[i].innerHTML = player.heartSolid;
@@ -277,7 +256,6 @@ function resetGame() {
     allEnemies.forEach(enemy => {
         enemy.x = 0;
     });
-    reset();
 }
     
 // This listens for key presses and sends the keys to your
