@@ -93,7 +93,7 @@ var Engine = (function(global) {
      * render methods. */
      
     function updateEntities(dt) {
-        if(player.lives === 0 || youWon() )
+        if(player.lives === 0 || player.youWon() )
             {
                return false;
             } 
@@ -169,10 +169,11 @@ var Engine = (function(global) {
         if( hearts.displayHeart ) {
             hearts.render();
         }
-        if( gameOver() ) {
+        if( player.lives === 0) {
+            player.gameOver();
             ctx.drawImage(Resources.get('images/game-over.png'), 50, 150);
         }
-        if( youWon() ) {
+        if( player.youWon() ) {
             ctx.drawImage(Resources.get('images/win.png'), 130, 150);
         }
 
