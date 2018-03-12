@@ -54,11 +54,23 @@ function isTop() {
          return interval;
      }
 // Class declaration for Player, Enemy and Heart
-class Player {
-    constructor() {
-        this.sprite = 'images/char-boy.png';
-        this.x = 202;
-        this.y = 400;
+
+class Entity {
+    constructor(x,y,sprite) {
+        this.x = x;
+        this.y = y;
+        this.sprite = sprite;
+    }
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
+}
+
+
+
+class Player extends Entity {
+    constructor(x,y,sprite) {
+        super(x,y,sprite);
         this.lives = 3;
         this.score = 0;
         this.heartSolid = '<i class="fa fa-heart fa-2x"></i>';
@@ -152,13 +164,13 @@ class Player {
 }
 
 // Enemies our player must avoid
-class Enemy extends Player {
-    constructor(x,y,speed) {
-        super(x,y);
-        this.x = x;
-        this.y = y;
+class Enemy extends Entity {
+    constructor(x,y,sprite,speed) {
+        super(x,y,sprite);
+        //this.x = x;
+        //this.y = y;
         this.speed = speed;
-        this.sprite = 'images/enemy-bug.png';
+       
     }
     update(dt) {
         if(this.x >=  rightBoundary) {
@@ -171,15 +183,9 @@ class Enemy extends Player {
     }
 
 //Lives class
-class Heart {
-    constructor() {
-        this.sprite = 'images/Heart.png'; //'/images/Heart.png';
-        this.x = randomPlacement()[0];
-        this.y = randomPlacement()[1];
+class Heart extends Entity {
+    constructor(x,y,sprite) {
         this.displayHeart = false; //variable for displaying a Heart, if true it is displayed, if false its not
-    }
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
     displayOrNot() {
@@ -197,18 +203,19 @@ class Heart {
 // Instantiate objects
 
 //Player
-let player = new Player();
+let player = new Player(202,400,'images/char-boy.png');
 
 //Enemies
 const allEnemies = [];
+const enemySprite = 'images/enemy-bug.png';
 // Place all enemy objects in an array called allEnemies
 (function numberOfEnemies (number) {
     let i=0;
     do {
         if(allEnemies.length === number - 1) {
-            allEnemies.push(new Enemy(100,234 - (randomInt * 83), speed())); //places the number-1 sprite on random row
+            allEnemies.push(new Enemy(100,234 - (randomInt * 83),enemySprite, speed())); //places the number-1 sprite on random row
         }else {
-        allEnemies.push(new Enemy(0, 234 - ( i * 83 ) , speed())); //places the number amount of sprites to first 3 rows
+        allEnemies.push(new Enemy(0, 234 - ( i * 83 ), enemySprite , speed())); //places the number amount of sprites to first 3 rows
         }
         i++;
     }
@@ -216,7 +223,7 @@ const allEnemies = [];
 })(4);
 
 //Heart
-const hearts = new Heart();
+const hearts = new Heart(randomPlacement()[0],randomPlacement()[1],'images/Heart.png');
 
 function checkCollisions() {
     for (const enemy of allEnemies) {
